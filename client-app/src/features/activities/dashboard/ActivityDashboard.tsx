@@ -26,7 +26,7 @@ export const ActivityDashboard: React.FC<IProps> = ({
           />
         </Grid.Column>
         <Grid.Column width={6}>
-          <ActivityDetails activity={selectedActivity} />
+          {selectedActivity && <ActivityDetails activity={selectedActivity} />}
           <ActivityForm />
         </Grid.Column>
       </Grid>
