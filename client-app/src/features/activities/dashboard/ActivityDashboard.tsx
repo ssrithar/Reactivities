@@ -9,27 +9,45 @@ interface IProps {
   activities: IActivity[];
   selectActivity: (id: string) => void;
   selectedActivity: IActivity | null;
+  editMode: boolean;
+  setEditMode: (editMode: boolean) => void;
+  setSelectedActivity: (activity: IActivity | null) => void;
+  createActivity: (activity: IActivity) => void;
+  editActivity: (activity: IActivity) => void;
 }
 
 export const ActivityDashboard: React.FC<IProps> = ({
   activities,
   selectActivity,
   selectedActivity,
-}) => {
-  return (
-    <React.Fragment>
-      <Grid>
-        <Grid.Column width={10}>
-          <ActivityList
-            activities={activities}
-            selectActivity={selectActivity}
+  editMode,
+  setEditMode,
+  setSelectedActivity,
+  createActivity,
+  editActivity,
+}) => (
+  <React.Fragment>
+    <Grid>
+      <Grid.Column width={10}>
+        <ActivityList activities={activities} selectActivity={selectActivity} />
+      </Grid.Column>
+      <Grid.Column width={6}>
+        {selectedActivity && !editMode && (
+          <ActivityDetails
+            activity={selectedActivity}
+            setEditMode={setEditMode}
+            setSelectedActivity={setSelectedActivity}
           />
-        </Grid.Column>
-        <Grid.Column width={6}>
-          {selectedActivity && <ActivityDetails activity={selectedActivity} />}
-          <ActivityForm />
-        </Grid.Column>
-      </Grid>
-    </React.Fragment>
-  );
-};
+        )}
+        {editMode && (
+          <ActivityForm
+            setEditMode={setEditMode}
+            activity={selectedActivity}
+            createActivity={createActivity}
+            editActivity={editActivity}
+          />
+        )}
+      </Grid.Column>
+    </Grid>
+  </React.Fragment>
+);
