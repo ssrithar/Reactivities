@@ -8,6 +8,7 @@ interface IProps {
   activity: IActivity | null;
   createActivity: (activity: IActivity) => void;
   editActivity: (activity: IActivity) => void;
+  submitting: boolean;
 }
 
 export const ActivityForm: React.FC<IProps> = ({
@@ -15,6 +16,7 @@ export const ActivityForm: React.FC<IProps> = ({
   activity: initializeFormState,
   createActivity,
   editActivity,
+  submitting,
 }) => {
   const initializeForm = () => {
     if (initializeFormState) {
@@ -91,7 +93,13 @@ export const ActivityForm: React.FC<IProps> = ({
           placeholder="Venue"
           value={activity.venue}
         />
-        <Button floated="right" type="submit" positive content="Submit" />
+        <Button
+          loading={submitting}
+          floated="right"
+          type="submit"
+          positive
+          content="Submit"
+        />
         <Button
           onClick={() => setEditMode(false)}
           floated="right"
