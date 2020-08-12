@@ -4,3 +4,9 @@ obj
 .vs
 *.db
 appsettings.json
+*.yml
+node_modules/cls/LICENSE
+node_modules/cls/package.json
+node_modules/cls/main.js
+node_modules/cls/README.md
+node_modules/cls/test/run.js
