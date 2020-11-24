@@ -8,18 +8,40 @@ class ActivityStore {
   @observable loadingInitial = false;
   @observable selectedActivity: IActivity | undefined;
   @observable editMode = false;
+  @observable submitting = false;
 
-  @action loadActivities = () => {
+  @action loadActivities = async () => {
     this.loadingInitial = true;
 
-    agent.Activities.list()
-      .then((activities) => {
-        activities.forEach((a) => {
-          a.date = a.date.split(".") && a.date.split(".")[0];
-          this.activities.push(a);
-        });
-      })
-      .finally(() => (this.loadingInitial = false));
+    try {
+      const activities = await agent.Activities.list();
+      activities.forEach((a) => {
+        a.date = a.date.split(".") && a.date.split(".")[0];
+        this.activities.push(a);
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      this.loadingInitial = false;
+    }
+  };
+
+  @action createActivity = async (activity: IActivity) => {
+    this.submitting = true;
+    try {
+      await agent.Activities.create(activity);
+      this.activities.push(activity);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      this.editMode = false;
+      this.submitting = false;
+    }
+  };
+
+  @action openCreateForm = () => {
+    this.editMode = true;
+    this.selectedActivity = undefined;
   };
 
   @action selectActivity = (id: string) => {
