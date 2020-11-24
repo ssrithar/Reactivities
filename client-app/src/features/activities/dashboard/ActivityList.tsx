@@ -15,7 +15,7 @@ const ActivityList: React.FC<IProps> = ({
   target,
 }) => {
   const activityStore = useContext(ActivityStore);
-  const { activities, selectActivity } = activityStore;
+  const { activitiesByDate: activities, selectActivity } = activityStore;
   return (
     <React.Fragment>
       <Segment clearing>
