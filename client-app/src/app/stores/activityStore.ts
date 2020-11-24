@@ -4,6 +4,7 @@ import { IActivity } from "../models/activity";
 import agent from "../api/agent";
 
 class ActivityStore {
+  @observable activityRegistry = new Map();
   @observable activities: IActivity[] = [];
   @observable loadingInitial = false;
   @observable selectedActivity: IActivity | undefined;
@@ -11,7 +12,7 @@ class ActivityStore {
   @observable submitting = false;
 
   @computed get activitiesByDate() {
-    return this.activities.sort(
+    return Array.from(this.activityRegistry.values()).sort(
       (a, b) => Date.parse(a.date) - Date.parse(b.date)
     );
   }
@@ -23,7 +24,7 @@ class ActivityStore {
       const activities = await agent.Activities.list();
       activities.forEach((a) => {
         a.date = a.date.split(".") && a.date.split(".")[0];
-        this.activities.push(a);
+        this.activityRegistry.set(a.id, a);
       });
     } catch (error) {
       console.log(error);
@@ -36,7 +37,7 @@ class ActivityStore {
     this.submitting = true;
     try {
       await agent.Activities.create(activity);
-      this.activities.push(activity);
+      this.activityRegistry.set(activity.id, activity);
     } catch (error) {
       console.log(error);
     } finally {
@@ -51,7 +52,7 @@ class ActivityStore {
   };
 
   @action selectActivity = (id: string) => {
-    this.selectedActivity = this.activities.find((a) => a.id === id);
+    this.selectedActivity = this.activityRegistry.get(id);
     this.editMode = false;
   };
 }
