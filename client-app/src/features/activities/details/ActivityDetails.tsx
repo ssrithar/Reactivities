@@ -4,17 +4,13 @@ import { IActivity } from "../../../app/models/activity";
 import { observer } from "mobx-react-lite";
 import ActivityStore from "../../../app/stores/activityStore";
 
-interface IProps {
-  setEditMode: (editMode: boolean) => void;
-  setSelectedActivity: (activity: IActivity | null) => void;
-}
-
-const ActivityDetails: React.FC<IProps> = ({
-  setEditMode,
-  setSelectedActivity,
-}) => {
+const ActivityDetails: React.FC = () => {
   const activityStore = useContext(ActivityStore);
-  const { selectedActivity: activity } = activityStore;
+  const {
+    selectedActivity: activity,
+    openEditForm,
+    cancelEditForm,
+  } = activityStore;
 
   return (
     <Fragment>
@@ -34,13 +30,13 @@ const ActivityDetails: React.FC<IProps> = ({
         <Card.Content extra>
           <Button.Group widths={2}>
             <Button
-              onClick={() => setEditMode(true)}
+              onClick={() => openEditForm(activity!.id)}
               basic
               color="blue"
               content="Edit"
             />
             <Button
-              onClick={() => setSelectedActivity(null)}
+              onClick={cancelEditForm}
               basic
               color="grey"
               content="Cancel"
